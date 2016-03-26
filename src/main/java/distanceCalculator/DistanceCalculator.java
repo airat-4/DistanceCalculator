@@ -13,8 +13,7 @@ public interface DistanceCalculator {
 
     List getAllCities();
 
-    List<Map<String, Double>> calculateDistance(CalculationType calculationType, List<City> fromCities, List<City> toCities)
-            throws DistanceCannotBeCalculatedException;
+    List<Map<String, Double>> calculateDistance(CalculationType calculationType, List<City> fromCities, List<City> toCities);
 
     int uploadDataToDB(File xmlFile);
 
