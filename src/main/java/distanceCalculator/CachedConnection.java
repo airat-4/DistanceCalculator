@@ -3,44 +3,84 @@ package distanceCalculator;
 import entity.City;
 import entity.Distance;
 
-import java.util.HashMap;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 
 /**
  * Created by airat on 25.03.16.
  */
 public class CachedConnection {
-    private static CachedConnection connection = new CachedConnection();
+    private static final String url = "jdbc:mysql://localhost:3306/distance_calculator";
+    private static final String user = "root";
+    private static final String password = "root";
+    private static CachedConnection cachedConnection;
+    private static boolean loaded;
     private HashMap<Long, City> allCities = new HashMap<Long, City>();
     private HashMap<Long, List<Distance>> allDistance = new HashMap<Long, List<Distance>>();
+    private long maxID;
     private CachedConnection() {
+        Connection connection = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            System.out.println("Драйвер БД загружен");
+        } catch (ClassNotFoundException e) {
+            System.err.println("Неудалось загрузить драйвер БД");
+            e.printStackTrace();
+        }
+        try {
+            connection = DriverManager.getConnection(url, user, password);
+            System.out.println("Подключение с БД устоновлено");
+        } catch (SQLException e) {
+            System.err.println("Неудалось подключится к БД");
+            e.printStackTrace();
+        }
+        if (connection != null) {
+            try {
+                Statement statement = connection.createStatement();
 
+                ResultSet cities = statement.executeQuery("select * from city");
+                while (cities.next()) {
+                    long id = cities.getLong("id");
+                    String name = cities.getString("name");
+                    double latitude = cities.getDouble("latitude");
+                    double longitude = cities.getDouble("longitude");
+                    City city = new City(id, name, latitude, longitude);
+                    allCities.put(id, city);
+                    if (maxID < id) {
+                        maxID = id;
+                    }
+                }
+
+                ResultSet distances = statement.executeQuery("select * from distance");
+                while (distances.next()) {
+                    double distance = distances.getDouble("distance");
+                    long from_city = distances.getLong("from_city");
+                    long to_city = distances.getLong("to_city");
+                    Distance distance1 = new Distance(getCityByID(from_city), getCityByID(to_city), distance);
+                    if (allDistance.get(from_city) == null) {
+                        allDistance.put(from_city, new LinkedList<Distance>());
+                    }
+                    allDistance.get(from_city).add(distance1);
+                }
+
+                statement.close();
+                connection.close();
+                System.out.println("БД загружена");
+                loaded = true;
+
+            } catch (SQLException e) {
+                System.err.println("Не удалось загрузить БД");
+                e.printStackTrace();
+            }
+        }
     }
-//        allCities.put(1L,new City(1,"City1", 0,0));
-//        allCities.put(2L,new City(2,"City2", 5,5));
-//        allCities.put(3L,new City(3,"City3", 5,10));
-//        allCities.put(4L,new City(4,"City4", 25,40));
-//        allDistance.put(1L, new LinkedList<Distance>());
-//        allDistance.put(2L, new LinkedList<Distance>());
-//        allDistance.put(3L, new LinkedList<Distance>());
-//        allDistance.put(4L, new LinkedList<Distance>());
-//        Distance distance;
-//        distance = new Distance(allCities.get(1L),allCities.get(2l),1);
-//
-//        allDistance.get(1L).add(distance);
-//
-//        distance = new Distance(allCities.get(1l),allCities.get(3l),2);
-//        allDistance.get(1L).add(distance);
-//
-//        distance = new Distance(allCities.get(2l),allCities.get(4l),3);
-//        allDistance.get(2L).add(distance);
-//
-//        distance = new Distance(allCities.get(3l),allCities.get(4l),1);
-//        allDistance.get(3L).add(distance);
 
 
-    public static CachedConnection getInstance() {
-        return connection;
+    public static synchronized CachedConnection getInstance() {
+        if (!loaded) {
+            cachedConnection = new CachedConnection();
+        }
+        return cachedConnection;
     }
 
     public City getCityByID(long id) {
@@ -48,7 +88,15 @@ public class CachedConnection {
     }
 
     public List<Distance> getDistances(City fromCity) {
-
         return allDistance.get(fromCity.getID());
+    }
+
+    public ArrayList<ProxyCity> getAllCities() {
+        Collection<City> values = allCities.values();
+        ArrayList<ProxyCity> cities = new ArrayList<ProxyCity>(values.size());
+        for (City city : values) {
+            cities.add(new ProxyCity(city));
+        }
+        return cities;
     }
 }

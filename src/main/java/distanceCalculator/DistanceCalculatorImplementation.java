@@ -14,8 +14,8 @@ import java.util.Map;
  */
 public class DistanceCalculatorImplementation implements DistanceCalculator {
 
-    public List getAllCities() {
-        return null;
+    public List<ProxyCity> getAllCities() {
+        return CachedConnection.getInstance().getAllCities();
     }
 
     public List<Map<String, Double>> calculateDistance(CalculationType calculationType, List<City> fromCities, List<City> toCities) {
@@ -63,9 +63,9 @@ public class DistanceCalculatorImplementation implements DistanceCalculator {
     private void calculateDistanceMatrix(List<Map<String, Double>> distanceList, List<City> fromCities, List<City> toCities) {
         int amountDistances = Math.min(fromCities.size(), toCities.size());
         for (int i = 0; i < amountDistances; ++i) {
-            double distance = 0;
+
             try {
-                distance = calculateDistanceMatrix(fromCities.get(i), toCities.get(i));
+                double distance = calculateDistanceMatrix(fromCities.get(i), toCities.get(i));
                 distanceList.get(i).put("DistanceMatrix", distance);
             } catch (DistanceCannotBeCalculatedException e) {
                 distanceList.get(i).put("DistanceMatrix", null);
