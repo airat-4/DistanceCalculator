@@ -1,8 +1,12 @@
 package entity;
 
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * Created by airat on 25.03.16.
  */
+
+@XmlType(propOrder = {"ID", "name", "latitude", "longitude"})
 public class City {
     private long ID;
     private String name;
@@ -26,7 +30,10 @@ public class City {
 
         City city = (City) o;
 
-        return ID == city.ID;
+        return ID == city.ID
+                && name.equals(city.name)
+                && latitude == city.latitude
+                && longitude == city.longitude;
 
     }
 

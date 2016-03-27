@@ -91,7 +91,8 @@ public class DistanceCalculatorImplementation implements DistanceCalculator {
 
 
     public int uploadDataToDB(File xmlFile) {
-        return 0;
+
+        return 200;
     }
 
 
