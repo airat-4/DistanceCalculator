@@ -13,6 +13,14 @@ import java.util.Map;
  * Created by airat on 25.03.16.
  */
 public class DistanceCalculatorImplementation implements DistanceCalculator {
+    private static DistanceCalculatorImplementation distanceCalculator = new DistanceCalculatorImplementation();
+
+    private DistanceCalculatorImplementation() {
+    }
+
+    public static DistanceCalculatorImplementation getInstance() {
+        return distanceCalculator;
+    }
 
     public List<ProxyCity> getAllCities() {
         return CachedConnection.getInstance().getAllCities();
@@ -89,11 +97,8 @@ public class DistanceCalculatorImplementation implements DistanceCalculator {
 
     }
 
-
     public int uploadDataToDB(File xmlFile) {
-
-        return 200;
+        boolean success = CachedConnection.getInstance().loadWithXMLFile(xmlFile);
+        return success ? 200 : 204;
     }
-
-
 }
