@@ -7,7 +7,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import java.io.File;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.*;
 
@@ -89,7 +89,8 @@ public class CachedConnection {
     }
 
     public List<Distance> getDistances(City fromCity) {
-        return allDistance.get(fromCity.getID());
+        List<Distance> distances = allDistance.get(fromCity.getID());
+        return distances != null ? distances : new ArrayList<Distance>();
     }
 
     public ArrayList<ProxyCity> getAllCities() {
@@ -101,12 +102,12 @@ public class CachedConnection {
         return cities;
     }
 
-    public boolean loadWithXMLFile(File file) {
+    public boolean loadWithXMLFile(InputStream inputStream) {
         try {
             JAXBContext context = JAXBContext.newInstance(City.class, Distance.class, Container.class);
             Unmarshaller unmarshaller =
                     context.createUnmarshaller();
-            Container container = (Container) unmarshaller.unmarshal(file);
+            Container container = (Container) unmarshaller.unmarshal(inputStream);
             Connection connection = DriverManager.getConnection(url, user, password);
             Statement statement = connection.createStatement();
             for (City city : container.cities) {

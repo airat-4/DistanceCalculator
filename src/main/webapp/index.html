@@ -20,8 +20,12 @@
     <select id="fromCity" size="1"></select>
     <select id="toCity" size="1"></select>
     <button id="add">Добавить</button>
-    <button id=load">Загрузить XML</button>
     </br></br>
+    <form enctype="multipart/form-data" method="post" action="LoadXML">
+        <input type="file" name="file" id="file">
+        <input type="submit" value="Загрузить XML">
+    </form>
+    </br>
     Выберите тип расчета
     <select id="type" size="1">
         <option value="CROWFLIGHT">Crowflight</option>

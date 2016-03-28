@@ -19,4 +19,13 @@
         <servlet-name>Calculate</servlet-name>
         <url-pattern>/Calculate</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LoadXML</servlet-name>
+        <servlet-class>servlets.LoadXML</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoadXML</servlet-name>
+        <url-pattern>/LoadXML</url-pattern>
+    </servlet-mapping>
 </web-app>

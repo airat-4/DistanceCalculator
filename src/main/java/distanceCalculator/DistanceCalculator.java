@@ -2,7 +2,7 @@ package distanceCalculator;
 
 import entity.City;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -14,6 +14,6 @@ public interface DistanceCalculator {
 
     List calculateDistance(CalculationType calculationType, List<City> fromCities, List<City> toCities);
 
-    int uploadDataToDB(File xmlFile);
+    int uploadDataToDB(InputStream xmlFile);
 
 }

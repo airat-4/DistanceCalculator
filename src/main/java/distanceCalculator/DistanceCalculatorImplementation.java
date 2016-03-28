@@ -3,7 +3,7 @@ package distanceCalculator;
 import entity.City;
 import entity.Distance;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,7 +65,7 @@ public class DistanceCalculatorImplementation implements DistanceCalculator {
         double distance = Math.sqrt(
                 (toCity.getLatitude() - fromCity.getLatitude()) * (toCity.getLatitude() - fromCity.getLatitude())
                         + (toCity.getLongitude() - fromCity.getLongitude()) * (toCity.getLongitude() - fromCity.getLongitude()));
-        distanceMap.put("Crowflight", distance);
+        distanceMap.put("crowflight", distance);
     }
 
     private void calculateDistanceMatrix(List<Map<String, Double>> distanceList, List<City> fromCities, List<City> toCities) {
@@ -74,9 +74,9 @@ public class DistanceCalculatorImplementation implements DistanceCalculator {
 
             try {
                 double distance = calculateDistanceMatrix(fromCities.get(i), toCities.get(i));
-                distanceList.get(i).put("DistanceMatrix", distance);
+                distanceList.get(i).put("distanceMatrix", distance);
             } catch (DistanceCannotBeCalculatedException e) {
-                distanceList.get(i).put("DistanceMatrix", null);
+                distanceList.get(i).put("distanceMatrix", null);
             }
 
         }
@@ -97,7 +97,7 @@ public class DistanceCalculatorImplementation implements DistanceCalculator {
 
     }
 
-    public int uploadDataToDB(File xmlFile) {
+    public int uploadDataToDB(InputStream xmlFile) {
         boolean success = CachedConnection.getInstance().loadWithXMLFile(xmlFile);
         return success ? 200 : 204;
     }
