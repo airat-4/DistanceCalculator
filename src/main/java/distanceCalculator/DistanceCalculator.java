@@ -4,15 +4,16 @@ import entity.City;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by airat on 25.03.16.
  */
 public interface DistanceCalculator {
 
-    List getAllCities();
+    List<ProxyCity> getAllCities();
 
-    List calculateDistance(CalculationType calculationType, List<City> fromCities, List<City> toCities);
+    List<Map<String, Double>> calculateDistance(CalculationType calculationType, List<City> fromCities, List<City> toCities);
 
     int uploadDataToDB(InputStream xmlFile);
 

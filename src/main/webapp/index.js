@@ -24,9 +24,9 @@ $(function () {
         td.attr("name", $("#toCity :selected").val());
         td.html($("#toCity :selected").text());
         tr.append(td);
-        td = $("<td id = 'C_"+$("#fromCity :selected").val()+"_"+$("#toCity :selected").val()+"'>");
+        td = $("<td class = 'C_"+$("#fromCity :selected").val()+"_"+$("#toCity :selected").val()+"'>");
         tr.append(td);
-        td = $("<td id = 'M_"+$("#fromCity :selected").val()+"_"+$("#toCity :selected").val()+"'>");
+        td = $("<td class = 'M_"+$("#fromCity :selected").val()+"_"+$("#toCity :selected").val()+"'>");
         tr.append(td);
         tbody.append(tr);
     });
@@ -44,14 +44,14 @@ $(function () {
             for(var i = 0; i < data.result.length; ++i){
                 var crowflight = data.result[i].crowflight;
                 if(crowflight == undefined)
-                    $("#C_"+fromCities[i]+"_"+toCities[i]).html("-");
+                    $(".C_"+fromCities[i]+"_"+toCities[i]).html("-");
                 else
-                    $("#C_"+fromCities[i]+"_"+toCities[i]).html(crowflight);
+                    $(".C_"+fromCities[i]+"_"+toCities[i]).html(crowflight);
                 var distanceMatrix = data.result[i].distanceMatrix;
                 if(distanceMatrix == undefined)
-                    $("#M_"+fromCities[i]+"_"+toCities[i]).html("-");
+                    $(".M_"+fromCities[i]+"_"+toCities[i]).html("-");
                 else
-                    $("#M_"+fromCities[i]+"_"+toCities[i]).html(distanceMatrix);
+                    $(".M_"+fromCities[i]+"_"+toCities[i]).html(distanceMatrix);
             }
         });
 
